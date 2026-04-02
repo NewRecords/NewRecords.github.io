@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<!--
+  DMJMixing Smart Link Landing Page
+  ===================================
+  This is a single HTML file — everything lives here.
+  To customize: search for [PLACEHOLDER] comments and swap in your real info.
+  To add blog posts: find the "BLOG POSTS" section near the bottom and follow the pattern.
+-->
+<html lang="en">
+<head>
+  <!-- ─── META TAGS ────────────────────────────────────────────────────────
+       These tell browsers and social platforms how to display your page.
+       "charset" sets text encoding. "viewport" makes it scale on mobile.
+       "og:" tags control how it looks when shared on social media.
+  ──────────────────────────────────────────────────────────────────────── -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DMJ Mixing</title><!-- [PLACEHOLDER] Change to your brand name -->
+  <meta name="description" content="Audio engineering. Data-backed decisions. Hip-hop mixes that hit." />
+  <!-- [PLACEHOLDER] Change the description above to your tagline -->
+
+  <!-- Open Graph tags for social sharing previews -->
+  <meta property="og:title" content="DMJ Mixing" />
+  <meta property="og:description" content="Audio engineering. Data-backed decisions. Hip-hop mixes that hit." />
+  <meta property="og:type" content="website" />
+
+  <!-- ─── GOOGLE FONTS ────────────────────────────────────────────────────
+       We load two fonts from Google:
+       - "Syne" is used for headlines — geometric, bold, technical feeling
+       - "DM Sans" is used for body text — clean and readable at small sizes
+       These load via a <link> tag, which fetches the font files from Google's servers.
+  ──────────────────────────────────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <!-- ─── STYLES ──────────────────────────────────────────────────────────
+       All visual design lives in this <style> block.
+       CSS variables (--name: value) at the top control your color system.
+       Change those four color values and the whole page updates instantly.
+  ──────────────────────────────────────────────────────────────────────── -->
+  <style>
+
+    /* ── CSS CUSTOM PROPERTIES (VARIABLES) ──────────────────────────────
+       Think of these like brand color swatches. Define once, use everywhere.
+       :root means "apply to the whole document."
+    ─────────────────────────────────────────────────────────────────── */
+    :root {
+      --base:       #1a1a1a; /* 60% — main background, near-black            */
+      --surface:    #252525; /* 30% — card/button backgrounds, dark gray     */
+      --surface-2:  #2e2e2e; /* slightly lighter surface for hover states    */
+      --accent:     #d4a843; /* 10% — amber/gold, used sparingly on CTAs     */
+      --accent-dim: #a07d2a; /* darker amber for hover states                */
+      --text-hi:    #f0ece4; /* high-contrast text — nearly white with warmth*/
+      --text-mid:   #a09a90; /* mid-tone text — subtitles, metadata          */
+      --text-lo:    #5a554e; /* low-contrast — borders, dividers             */
+      --font-head:  'Syne', sans-serif;
+      --font-body:  'DM Sans', sans-serif;
+    }
+
+    /* ── RESET & BASE ────────────────────────────────────────────────────
+       box-sizing: border-box means padding/border are included in width.
+       This prevents elements from overflowing their containers unexpectedly.
+       margin: 0 / padding: 0 removes browser default spacing.
+    ─────────────────────────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* html scroll-behavior makes anchor links (#blog) scroll smoothly */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* body is the outermost container. flex + min-height: 100vh centers
+       content vertically and ensures the page always fills the screen. */
+    body {
+      background-color: var(--base);
+      color: var(--text-hi);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;    /* stack children top to bottom */
+      align-items: center;       /* center children horizontally  */
+      padding: 48px 20px 80px;   /* top/side/bottom breathing room */
+
+      /* Subtle noise texture overlay creates depth without harsh lines */
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+
+    /* ── PAGE WRAPPER ────────────────────────────────────────────────────
+       max-width caps the content at 520px — ideal for link-in-bio pages.
+       width: 100% lets it shrink on small screens.
+       The wrapper is a flex column so sections stack naturally.
+    ─────────────────────────────────────────────────────────────────── */
+    .page-wrapper {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;                    /* sections control their own spacing       */
+    }
+
+    /* ── HEADER / IDENTITY SECTION ───────────────────────────────────────
+       This is the top block: logo/name + tagline.
+       text-align: center centers everything within this section.
+    ─────────────────────────────────────────────────────────────────── */
+    .identity {
+      text-align: center;
+      padding-bottom: 36px;
+      animation: fadeUp 0.6s ease both;  /* fade in on page load            */
+    }
+
+    /* Avatar circle — replace the initials with an <img> if you have a photo */
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;         /* makes it a circle                       */
+      background-color: var(--surface);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-family: var(--font-head);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    /* Brand name — the main headline */
+    .brand-name {
+      font-family: var(--font-head);
+      font-size: clamp(26px, 6vw, 34px); /* clamp() = responsive font size  */
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-hi);
+      margin-bottom: 10px;
+    }
+
+    /* The accent word inside the brand name gets the gold color */
+    .brand-name .accent {
+      color: var(--accent);
+    }
+
+    /* Tagline — the short descriptor below the name */
+    .tagline {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-mid);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      line-height: 1.7;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+
+    /* ── THIN DIVIDER LINE ───────────────────────────────────────────────
+       A subtle horizontal rule between sections.
+       The amber gradient adds warmth without being heavy.
+    ─────────────────────────────────────────────────────────────────── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        var(--text-lo) 20%,
+        var(--text-lo) 80%,
+        transparent
+      );
+      margin-bottom: 28px;
+    }
+
+    /* A centered dot-divider used between sections */
+    .section-label {
+      font-family: var(--font-head);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-lo);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    /* ── LINKS SECTION ───────────────────────────────────────────────────
+       The core of the smart link page — stacked button links.
+       Each .link-btn is a full-width button that opens a URL.
+       display: flex lets us put an icon and text side by side.
+    ─────────────────────────────────────────────────────────────────── */
+    .links-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    /* Each link button */
+    .link-btn {
+      display: flex;                /* row layout: icon + text + arrow        */
+      align-items: center;
+      gap: 14px;
+      background-color: var(--surface);
+      border: 1px solid var(--text-lo);
+      border-radius: 10px;
+      padding: 16px 20px;
+      text-decoration: none;        /* removes the underline from the <a> tag */
+      color: var(--text-hi);
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;   /* smooth hover animation                 */
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Hover state — background lifts slightly, accent border appears */
+    .link-btn:hover {
+      background-color: var(--surface-2);
+      border-color: var(--accent);
+      transform: translateY(-1px);  /* tiny lift effect                       */
+    }
+
+    /* Primary CTA button (the most important link) gets accent treatment */
+    .link-btn.primary {
+      background-color: var(--accent);
+      border-color: var(--accent);
+      color: #111;                  /* dark text on amber background          */
+      font-weight: 600;
+    }
+
+    .link-btn.primary:hover {
+      background-color: var(--accent-dim);
+      border-color: var(--accent-dim);
+    }
+
+    /* Icon container — fixed width so all labels stay aligned */
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background-color: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;               /* prevents icon from squishing           */
+      font-size: 18px;
+    }
+
+    .link-btn.primary .btn-icon {
+      background-color: rgba(0,0,0,0.15);
+    }
+
+    /* The text label inside each button */
+    .btn-label {
+      flex: 1;                      /* grows to fill available space          */
+    }
+
+    .btn-label .btn-title {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .btn-label .btn-sub {
+      display: block;
+      font-size: 12px;
+      color: var(--text-mid);
+      margin-top: 2px;
+      font-weight: 300;
+    }
+
+    .link-btn.primary .btn-label .btn-sub {
+      color: rgba(0,0,0,0.55);
+    }
+
+    /* Arrow chevron at the right side of each button */
+    .btn-arrow {
+      font-size: 14px;
+      color: var(--text-lo);
+      flex-shrink: 0;
+    }
+
+    .link-btn.primary .btn-arrow {
+      color: rgba(0,0,0,0.4);
+    }
+
+    /* ── BLOG SECTION ────────────────────────────────────────────────────
+       Shows your latest blog/newsletter post.
+       TO ADD A POST: copy one .post-card block and update the text.
+       Posts appear newest-first — just put new ones at the top of the list.
+    ─────────────────────────────────────────────────────────────────── */
+    .blog-section {
+      margin-bottom: 20px;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    /* Each blog post card */
+    .post-card {
+      background-color: var(--surface);
+      border: 1px solid var(--text-lo);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 12px;
+      text-decoration: none;
+      color: var(--text-hi);
+      display: block;
+      transition: all 0.2s ease;
+    }
+
+    .post-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Post metadata row: date + reading time */
+    .post-meta {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+
+    .post-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-family: var(--font-head);
+    }
+
+    .post-date {
+      font-size: 11px;
+      color: var(--text-mid);
+      font-weight: 300;
+    }
+
+    .post-title {
+      font-family: var(--font-head);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 6px;
+      color: var(--text-hi);
+    }
+
+    .post-excerpt {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* "Read more" link inside the post card */
+    .post-read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-top: 12px;
+      font-family: var(--font-head);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── FULL POST VIEW ──────────────────────────────────────────────────
+       When a post is "opened," this section slides in and hides the card list.
+       JavaScript toggles the .hidden class to show/hide sections.
+    ─────────────────────────────────────────────────────────────────── */
+    .post-full {
+      background-color: var(--surface);
+      border: 1px solid var(--text-lo);
+      border-radius: 10px;
+      padding: 24px 20px;
+      margin-bottom: 12px;
+    }
+
+    .post-full.hidden {
+      display: none;                /* hidden by default — JS reveals it      */
+    }
+
+    .post-full-header {
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--text-lo);
+    }
+
+    .post-full-title {
+      font-family: var(--font-head);
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .post-full-body {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-mid);
+    }
+
+    /* Paragraphs inside the full post */
+    .post-full-body p {
+      margin-bottom: 14px;
+    }
+
+    .post-full-body strong {
+      color: var(--text-hi);
+      font-weight: 500;
+    }
+
+    /* Back button to return to the card list */
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-family: var(--font-head);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────────────────────
+       Minimal footer — just a small line of text.
+    ─────────────────────────────────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      padding-top: 16px;
+      font-size: 11px;
+      color: var(--text-lo);
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      animation: fadeUp 1s ease 0.3s both;
+    }
+
+    /* ── ANIMATIONS ──────────────────────────────────────────────────────
+       fadeUp: elements start 20px below and transparent, then rise into place.
+       animation-delay staggered on each section creates a cascade effect.
+       "both" fill-mode means the element stays in its final state.
+    ─────────────────────────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Stagger the links section animation slightly after the header */
+    .links-section {
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+
+    /* ── RESPONSIVE TWEAKS ───────────────────────────────────────────────
+       @media queries apply CSS rules only when the screen is a certain size.
+       max-width: 480px targets mobile phones specifically.
+    ─────────────────────────────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      body {
+        padding: 36px 16px 60px;
+      }
+      .brand-name {
+        font-size: 26px;
+      }
+      .link-btn {
+        padding: 14px 16px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <!-- ════════════════════════════════════════════════════════════════════
+       PAGE WRAPPER — all content lives inside here
+  ════════════════════════════════════════════════════════════════════ -->
+  <main class="page-wrapper">
+
+    <!-- ── IDENTITY / HEADER SECTION ──────────────────────────────────
+         [PLACEHOLDER] Replace "DMJ" in the avatar with your initials or
+         delete the avatar and use an <img> tag with your photo instead.
+         [PLACEHOLDER] Update brand-name and tagline with your actual copy.
+    ─────────────────────────────────────────────────────────────────── -->
+    <header class="identity">
+      <!-- Avatar: swap the initials or replace with: <img src="your-photo.jpg" alt="Your Name"> -->
+      <div class="avatar">DMJ</div><!-- [PLACEHOLDER] -->
+
+      <h1 class="brand-name">
+        DMJ <span class="accent">Mixing</span><!-- [PLACEHOLDER] your brand name -->
+      </h1>
+
+      <p class="tagline">
+        Audio Engineering &nbsp;·&nbsp; Hip-Hop Mixes &nbsp;·&nbsp; Data-Backed Decisions
+        <!-- [PLACEHOLDER] your tagline — keep it short, 3 phrases max -->
+      </p>
+    </header>
+
+    <!-- ── SOCIAL LINKS ────────────────────────────────────────────────
+         [PLACEHOLDER] Replace every href="#" with your real URL.
+         Example: href="https://www.instagram.com/yourusername"
+         To REMOVE a link: delete the entire <a> block.
+         To ADD a link: copy one <a> block and update href, icon, and label.
+    ─────────────────────────────────────────────────────────────────── -->
+    <div class="section-label">Find me here</div>
+    <nav class="links-section" aria-label="Social links">
+
+      <!-- INSTAGRAM — [PLACEHOLDER] replace href with your Instagram URL -->
+      <a href="#" class="link-btn primary" target="_blank" rel="noopener noreferrer">
+        <!-- target="_blank" opens link in a new tab  -->
+        <!-- rel="noopener noreferrer" is a security best practice for target="_blank" -->
+        <div class="btn-icon">📷</div>
+        <div class="btn-label">
+          <span class="btn-title">Instagram</span>
+          <span class="btn-sub">@yourusername &nbsp;·&nbsp; Mixes, process, breakdowns</span>
+          <!-- [PLACEHOLDER] update @yourusername -->
+        </div>
+        <span class="btn-arrow">›</span>
+      </a>
+
+      <!-- YOUTUBE — [PLACEHOLDER] replace href with your YouTube channel URL -->
+      <a href="#" class="link-btn" target="_blank" rel="noopener noreferrer">
+        <div class="btn-icon">▶</div>
+        <div class="btn-label">
+          <span class="btn-title">YouTube</span>
+          <span class="btn-sub">Full episodes, tutorials, behind the sessions</span>
+        </div>
+        <span class="btn-arrow">›</span>
+      </a>
+
+      <!-- EMAIL — [PLACEHOLDER] replace with your actual email address -->
+      <a href="mailto:your@email.com" class="link-btn">
+        <!-- mailto: opens the user's email app with your address pre-filled -->
+        <div class="btn-icon">✉</div>
+        <div class="btn-label">
+          <span class="btn-title">Book a Mix Session</span>
+          <span class="btn-sub">Inquiries, rates, and availability</span>
+        </div>
+        <span class="btn-arrow">›</span>
+      </a>
+
+      <!-- EXTRA LINK (optional) — delete this whole block if you don't need it -->
+      <!-- [PLACEHOLDER] could be Spotify, SoundCloud, Linktree, etc. -->
+      <!--
+      <a href="#" class="link-btn" target="_blank" rel="noopener noreferrer">
+        <div class="btn-icon">🎧</div>
+        <div class="btn-label">
+          <span class="btn-title">Listen on Spotify</span>
+          <span class="btn-sub">Podcast episodes and mixes</span>
+        </div>
+        <span class="btn-arrow">›</span>
+      </a>
+      -->
+
+    </nav>
+
+    <!-- ── BLOG / NEWSLETTER SECTION ──────────────────────────────────
+         This shows your latest writing right below the links.
+         HOW TO ADD A POST:
+           1. Copy one entire <!-- POST CARD --> block
+           2. Paste it at the TOP of the list (newest first)
+           3. Update: post-tag, post-date, post-title, post-excerpt
+           4. Update the onclick ID to match the new post-full ID
+           5. Paste a matching post-full block and fill in the content
+    ─────────────────────────────────────────────────────────────────── -->
+
+    <!-- ── BLOG SECTION WRAPPER ── JavaScript toggles between card list and full posts -->
+    <div id="blog" class="blog-section">
+
+      <div class="divider"></div>
+      <div class="section-label">Latest Writing</div>
+
+      <!-- ── POST CARDS (list view) ── -->
+      <!-- The id="post-list" lets JavaScript find and hide this container -->
+      <div id="post-list">
+
+        <!-- ════ POST CARD 1 (NEWEST — always keep newest at top) ════
+             onclick calls showPost('post-1') — the ID must match the
+             corresponding post-full block below.
+        ═══════════════════════════════════════════════════════════════ -->
+        <div class="post-card" onclick="showPost('post-1')" role="button" tabindex="0"
+             onkeypress="if(event.key==='Enter')showPost('post-1')">
+          <div class="post-meta">
+            <span class="post-tag">Engineering</span><!-- [PLACEHOLDER] category -->
+            <span class="post-date">April 2026</span><!-- [PLACEHOLDER] date -->
+          </div>
+          <h2 class="post-title">
+            Why Your Mix Sounds Crowded in the Mids — And What to Do About It
+            <!-- [PLACEHOLDER] your post title -->
+          </h2>
+          <p class="post-excerpt">
+            Most engineers reach for an EQ cut when a mix feels crowded. I check the data first.
+            Here's the three-step process I use every session.
+            <!-- [PLACEHOLDER] 1-2 sentence teaser. Should make them want to read more. -->
+          </p>
+          <span class="post-read-more">Read post &nbsp;›</span>
+        </div>
+
+        <!-- ════ POST CARD 2 ════ [PLACEHOLDER] Replace with your second post -->
+        <div class="post-card" onclick="showPost('post-2')" role="button" tabindex="0"
+             onkeypress="if(event.key==='Enter')showPost('post-2')">
+          <div class="post-meta">
+            <span class="post-tag">Data &amp; Craft</span>
+            <span class="post-date">March 2026</span>
+          </div>
+          <h2 class="post-title">
+            I Mixed a Track for an Artist With 85K Monthly Listeners. Here's What the Data Told Me.
+          </h2>
+          <p class="post-excerpt">
+            Streaming demographics aren't just marketing data. They're engineering decisions.
+            72% male, 18–24 audience means something specific about the low end.
+          </p>
+          <span class="post-read-more">Read post &nbsp;›</span>
+        </div>
+
+      </div><!-- end #post-list -->
+
+      <!-- ── FULL POST VIEWS ─────────────────────────────────────────
+           These are hidden by default (.hidden class = display:none).
+           When a card is clicked, showPost() removes the hidden class.
+           Each post-full id must match the onclick in the corresponding card.
+      ──────────────────────────────────────────────────────────────── -->
+
+      <!-- ════ FULL POST 1 ════ id="post-1" matches onclick="showPost('post-1')" -->
+      <div id="post-1" class="post-full hidden">
+        <div class="post-full-header">
+          <!-- Back button — calls hidePost() to return to the card list -->
+          <button class="back-btn" onclick="hidePost('post-1')">‹ &nbsp;Back</button>
+          <div class="post-meta">
+            <span class="post-tag">Engineering</span>
+            <span class="post-date">April 2026</span>
+          </div>
+          <h2 class="post-full-title">
+            Why Your Mix Sounds Crowded in the Mids — And What to Do About It
+          </h2>
+        </div>
+        <!-- ── POST BODY ── Write your article content here.
+             Use <p> for paragraphs. Use <strong> for bold emphasis.
+             Keep paragraphs short — 3-4 sentences max.
+        ──────────────────────────────────────────────────────────────── -->
+        <div class="post-full-body">
+          <p>
+            Most engineers reach for an EQ cut the moment a mix starts feeling crowded in the mids.
+            They find the offending frequency, cut it, and move on. The problem comes back three songs later.
+          </p>
+          <p>
+            <strong>The issue isn't the frequency. It's the relationship between elements.</strong>
+            The brain processes mid-range frequencies — roughly 300Hz to 3kHz — as voice signals first.
+            When too many elements compete in that range simultaneously, the brain spends cognitive resources
+            sorting what to focus on instead of just experiencing the record.
+          </p>
+          <p>
+            Here's the three-step process I use before touching any EQ:
+          </p>
+          <p>
+            <strong>1. Spectrum snapshot.</strong> Before I make any adjustments, I take a spectrum analyzer
+            reading of the full mix. I'm looking at where energy clusters. Mid buildup almost always
+            points to a specific culprit — usually a rhythm guitar, synth pad, or distorted bass
+            that wasn't accounted for in the arrangement.
+          </p>
+          <p>
+            <strong>2. Context check.</strong> I look at the artist's streaming data.
+            What's the median playback device for their audience?
+            Earbuds and laptop speakers have very different mid-frequency responses than monitors.
+            What sounds balanced on my system may feel thin or harsh on the listener's actual speakers.
+          </p>
+          <p>
+            <strong>3. Subtraction before addition.</strong> Only after the above do I reach for EQ.
+            And I subtract first. Adding frequencies is the last resort — it raises the noise floor
+            and eats headroom you'll need at the end of the chain.
+          </p>
+          <p>
+            The squint test from visual design applies here: close your eyes, listen to the first
+            four bars of your mix. The one instrument you notice first is dominating the mid-range.
+            Ask whether that's the right instrument for the genre's emotional contract with the listener.
+          </p>
+          <!-- [PLACEHOLDER] Replace all the above with your actual post content -->
+        </div>
+      </div><!-- end #post-1 -->
+
+      <!-- ════ FULL POST 2 ════ -->
+      <div id="post-2" class="post-full hidden">
+        <div class="post-full-header">
+          <button class="back-btn" onclick="hidePost('post-2')">‹ &nbsp;Back</button>
+          <div class="post-meta">
+            <span class="post-tag">Data &amp; Craft</span>
+            <span class="post-date">March 2026</span>
+          </div>
+          <h2 class="post-full-title">
+            I Mixed a Track for an Artist With 85K Monthly Listeners. Here's What the Data Told Me.
+          </h2>
+        </div>
+        <div class="post-full-body">
+          <p>
+            Before I opened the session, I pulled the artist's Spotify for Artists data.
+            85K monthly listeners. 72% male, 18–24. Top cities: Atlanta, Houston, New York.
+            Most streams coming from playlist adds, not direct artist plays.
+          </p>
+          <p>
+            <strong>That's not just a marketing brief. That's engineering information.</strong>
+          </p>
+          <p>
+            A 72% male 18–24 audience has specific listening habits: mobile-first, high-volume,
+            often on the move. Their expectation for low-end is shaped by the records
+            already in their rotation. If your mix doesn't lock into that reference frame,
+            it feels off — not because the frequencies are wrong, but because the emotional
+            contract of the genre wasn't honored.
+          </p>
+          <p>
+            The mix I delivered had a sub-bass decision that I'd normally make 3dB lower
+            for a streaming-first release. For this audience and these cities, I kept it
+            hotter. The test was simple: I ran the mix through a reference playlist of
+            five tracks that dominated their playlists. The sub needed to compete, not blend.
+          </p>
+          <p>
+            <strong>The data doesn't tell you what to do. It tells you what the listener expects.</strong>
+            Meeting that expectation is the first job of a mix engineer. Exceeding it is the actual job.
+          </p>
+          <!-- [PLACEHOLDER] Replace with your actual second post content -->
+        </div>
+      </div><!-- end #post-2 -->
+
+    </div><!-- end #blog -->
+
+    <!-- ── FOOTER ──────────────────────────────────────────────────────
+         [PLACEHOLDER] update the year and name
+    ─────────────────────────────────────────────────────────────────── -->
+    <footer class="footer">
+      © 2026 DMJ Mixing &nbsp;·&nbsp; Audio Engineering
+      <!-- [PLACEHOLDER] update year and name -->
+    </footer>
+
+  </main><!-- end .page-wrapper -->
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       JAVASCRIPT
+       This section handles the show/hide logic for blog posts.
+       No external libraries needed — this is plain vanilla JavaScript.
+  ════════════════════════════════════════════════════════════════════ -->
+  <script>
+
+    /**
+     * showPost(postId)
+     * ─────────────────
+     * Called when a post card is clicked.
+     * 1. Hides the card list (post-list element)
+     * 2. Reveals the full post matching postId
+     * 3. Scrolls the page up so the post starts at the top
+     *
+     * document.getElementById() finds an element by its id attribute.
+     * classList.add('hidden') adds CSS class "hidden" which sets display:none.
+     * classList.remove('hidden') removes it, making the element visible.
+     */
+    function showPost(postId) {
+      // Hide the card list
+      document.getElementById('post-list').classList.add('hidden');
+
+      // Show the full post
+      const post = document.getElementById(postId);
+      post.classList.remove('hidden');
+
+      // Scroll to the blog section smoothly
+      // document.getElementById('blog').scrollIntoView() tells the browser
+      // to scroll until the #blog element is visible.
+      document.getElementById('blog').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /**
+     * hidePost(postId)
+     * ─────────────────
+     * Called when the "Back" button inside a full post is clicked.
+     * Reverses showPost: hides the full post, reveals the card list.
+     */
+    function hidePost(postId) {
+      // Hide the full post
+      document.getElementById(postId).classList.add('hidden');
+
+      // Show the card list again
+      document.getElementById('post-list').classList.remove('hidden');
+
+      // Scroll back to the blog section heading
+      document.getElementById('blog').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+  </script>
+
+</body>
+</html>
